@@ -1,0 +1,76 @@
+:root {
+  --bg0:#202124; --bg1:#2f333a; --bg2:#3b414b;
+  --panel:rgba(255,255,255,.08); --panel2:rgba(255,255,255,.12);
+  --text:#fff; --muted:#c2c7ce;
+  --accent:#21b8ff; --accent2:#62dcff; --accent3:#0d8ae6;
+  --border:rgba(128,199,255,.18); --shadow:rgba(0,0,0,.25);
+}
+body[data-theme="light"] {
+  --bg0:#f4fbff; --bg1:#def2ff; --bg2:#fff;
+  --panel:rgba(255,255,255,.75); --panel2:rgba(255,255,255,.96);
+  --text:#132235; --muted:#60758a;
+  --accent:#17a8ff; --accent2:#72d8ff; --accent3:#0079d6;
+  --border:rgba(62,145,207,.24); --shadow:rgba(57,186,255,.18);
+}
+body[data-theme="amoled"] {
+  --bg0:#000; --bg1:#05080d; --bg2:#101721;
+  --panel:rgba(255,255,255,.05); --panel2:rgba(255,255,255,.08);
+  --text:#f2fbff; --muted:#93abc0;
+  --accent:#00bfff; --accent2:#5ee8ff; --accent3:#0077ff;
+  --border:rgba(0,200,255,.18); --shadow:rgba(0,0,0,.50);
+}
+* { box-sizing:border-box; }
+html, body { min-height:100%; margin:0; }
+body {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent2) 15%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--bg2), var(--bg1) 38%, var(--bg0));
+}
+.wrap {
+  width:min(1000px, 92vw); margin:0 auto; padding:34px 0 70px;
+  animation: in .45s cubic-bezier(.2,.9,.2,1);
+}
+@keyframes in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:22px; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:950; font-size:30px; }
+.mark {
+  width:42px; height:42px; border-radius:8px; display:grid; place-items:center;
+  background:linear-gradient(135deg, var(--accent3), var(--accent), var(--accent2));
+  color:#fff; box-shadow:0 16px 42px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+.actions { display:flex; gap:10px; flex-wrap:wrap; }
+.btn {
+  border:none; border-radius:8px; padding:11px 15px; color:#fff;
+  background:linear-gradient(135deg, var(--accent3), var(--accent));
+  font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex;
+}
+.btn.secondary { background:var(--panel); border:1px solid var(--border); color:var(--text); }
+.card, .setting {
+  background:var(--panel); border:1px solid var(--border); border-radius:8px;
+  padding:18px; margin-bottom:12px; box-shadow:0 16px 44px rgba(0,0,0,.12);
+  backdrop-filter:blur(18px);
+}
+.card h2 { margin:0 0 8px; }
+.muted { color:var(--muted); }
+select, input[type="checkbox"], input[type="color"] { accent-color:var(--accent); }
+
+/* Blur-эффект при клике ЛКМ — прозрачный, glass-like */
+@keyframes nexusBlurRipple {
+  0%   { opacity:.55; width:8px;   height:8px;   filter:blur(2px); }
+  35%  { opacity:.35; width:70px;  height:70px;  filter:blur(10px); }
+  70%  { opacity:.15; width:130px; height:130px; filter:blur(20px); }
+  100% { opacity:0;   width:180px; height:180px; filter:blur(32px); }
+}
+.nexus-click-blur {
+  position:fixed; left:0; top:0; width:8px; height:8px;
+  border-radius:50%; pointer-events:none; z-index:2147483647;
+  transform:translate(-50%, -50%);
+  background:radial-gradient(circle,
+    color-mix(in srgb, var(--nexus-accent, #21b8ff) 60%, transparent) 0%,
+    color-mix(in srgb, var(--nexus-accent, #21b8ff) 25%, transparent) 40%,
+    transparent 70%);
+  mix-blend-mode:screen;
+  animation:nexusBlurRipple 720ms cubic-bezier(.2,.8,.2,1) forwards;
+}

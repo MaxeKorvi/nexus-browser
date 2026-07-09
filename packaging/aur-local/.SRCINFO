@@ -1,0 +1,17 @@
+pkgbase = nexus-browser
+	pkgdesc = Nexus Browser — Electron browser with Nexus Search, profiles and encrypted password storage
+	pkgver = 6.0.0
+	pkgrel = 3
+	url = https://github.com/MaxeKorvi/nexus-browser
+	arch = x86_64
+	license = MIT
+	depends = electron33-bin
+	depends = hicolor-icon-theme
+	depends = desktop-file-utils
+	optdepends = xdg-utils: register Nexus Browser as a default browser
+	options = !strip
+	install = nexus-browser.install
+	source = nexus-browser-6.0.0.tar.gz
+	sha256sums = 70e6be69e4761b0da34e636999a0535bc1b03c7f07bb0f0675af266d8b43848e
+
+pkgname = nexus-browser

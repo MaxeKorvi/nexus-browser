@@ -1,0 +1,32 @@
+# Maintainer: MaxeKorvi <delsh114@outlook.com>
+pkgname=nexus-browser
+pkgver=6.0.0
+pkgrel=3
+pkgdesc='Nexus Browser — Electron browser with Nexus Search, profiles and encrypted password storage'
+arch=('x86_64')
+url='https://github.com/MaxeKorvi/nexus-browser'
+license=('MIT')
+depends=('electron33-bin' 'hicolor-icon-theme' 'desktop-file-utils')
+optdepends=('xdg-utils: register Nexus Browser as a default browser')
+install='nexus-browser.install'
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/MaxeKorvi/nexus-browser/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('70e6be69e4761b0da34e636999a0535bc1b03c7f07bb0f0675af266d8b43848e')
+options=('!strip')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -dm755 "${pkgdir}/opt/nexus-browser"
+  cp -a src package.json README_RU.txt "${pkgdir}/opt/nexus-browser/"
+
+  find "${pkgdir}/opt/nexus-browser" -type d -exec chmod 755 {} +
+  find "${pkgdir}/opt/nexus-browser" -type f -exec chmod 644 {} +
+
+  install -Dm755 packaging/aur/nexus-browser.sh "${pkgdir}/usr/bin/nexus-browser"
+  install -Dm644 packaging/aur/nexus-browser.desktop "${pkgdir}/usr/share/applications/nexus-browser.desktop"
+
+  for icon in build/icons/*x*.png; do
+    size="$(basename "${icon}" .png)"
+    install -Dm644 "${icon}" "${pkgdir}/usr/share/icons/hicolor/${size}/apps/nexus-browser.png"
+  done
+}

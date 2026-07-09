@@ -1,0 +1,182 @@
+:root {
+  --bg0:#050b12; --bg1:#09202b; --bg2:#122d3a;
+  --panel:rgba(255,255,255,.07); --panel2:rgba(255,255,255,.10);
+  --search:rgba(255,255,255,.12);
+  --text:#fff; --muted:#9db0c2;
+  --accent:#21b8ff; --accent2:#62dcff; --accent3:#0d8ae6;
+  --border:rgba(128,199,255,.18); --shadow:rgba(0,0,0,.25);
+}
+body[data-theme="light"] {
+  --bg0:#f4fbff; --bg1:#def2ff; --bg2:#fff;
+  --panel:rgba(255,255,255,.70); --panel2:rgba(255,255,255,.96);
+  --search:rgba(255,255,255,.96);
+  --text:#132235; --muted:#60758a;
+  --accent:#17a8ff; --accent2:#18bfee; --accent3:#0079d6;
+  --border:rgba(62,145,207,.24); --shadow:rgba(57,186,255,.18);
+}
+body[data-theme="amoled"] {
+  --bg0:#000; --bg1:#020711; --bg2:#07111c;
+  --panel:rgba(255,255,255,.05); --panel2:rgba(255,255,255,.08);
+  --search:rgba(255,255,255,.075);
+  --text:#f2fbff; --muted:#93abc0;
+  --accent:#00bfff; --accent2:#5ee8ff; --accent3:#0077ff;
+  --border:rgba(0,200,255,.18); --shadow:rgba(0,0,0,.50);
+}
+* { box-sizing:border-box; }
+html, body { height:100%; margin:0; overflow:hidden; }
+body {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--accent2) 16%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--bg2), var(--bg1) 38%, var(--bg0));
+  user-select: none;
+}
+.page { min-height:100%; display:flex; justify-content:center; align-items:flex-start; padding-top:58px; }
+.center { width:min(980px, 94vw); text-align:center; }
+.logo { margin:0 0 24px; display:inline-flex; align-items:center; justify-content:center; gap:22px; line-height:1; }
+.logo img { width:112px; height:122px; object-fit:contain; }
+.logo-text { font-size:clamp(58px, 7vw, 96px); font-weight:950; letter-spacing:-5px; color:#fff; }
+body[data-theme="light"] .logo-text { color:#132235; }
+.logo-text span { color:var(--accent2); }
+.search {
+  width:min(800px, 100%); height:62px; margin:0 auto;
+  display:flex; align-items:center; gap:12px; padding:0 14px 0 20px;
+  background:var(--search); border:1px solid var(--border); border-radius:999px;
+  box-shadow:0 18px 46px var(--shadow); backdrop-filter:blur(24px);
+}
+input { flex:1; min-width:0; height:100%; border:none; outline:none; color:var(--text); background:transparent; font-size:17px; user-select:text; }
+button { border:none; border-radius:999px; padding:12px 18px; color:#fff; background:linear-gradient(135deg, var(--accent3), var(--accent)); font-weight:800; cursor:pointer; }
+.icon-btn { width:42px; height:42px; padding:0; border-radius:50%; display:grid; place-items:center; background:var(--panel2); border:1px solid var(--border); color:var(--text); }
+.icon-btn svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.shortcuts { width:min(880px, 100%); margin:32px auto 0; display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+.shortcut { width:112px; padding:9px 6px 10px; border-radius:10px; color:var(--text); text-decoration:none; transition:.2s; position:relative; background:transparent; border:none; cursor:pointer; }
+.shortcut:hover { background:var(--panel); transform:translateY(-4px); }
+.remove { position:absolute; right:6px; top:6px; width:22px; height:22px; border-radius:50%; padding:0; background:rgba(0,0,0,.44); display:none; color:#fff; }
+.shortcut:hover .remove { display:block; }
+.icon { width:58px; height:58px; margin:0 auto 12px; display:grid; place-items:center; border-radius:10px; background:var(--panel2); border:1px solid var(--border); overflow:hidden; }
+.icon img { width:31px; height:31px; object-fit:contain; }
+.label { font-size:14px; font-weight:520; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hint { margin-top:20px; color:var(--muted); font-size:13px; }
+.muted { color: var(--muted); font-size:13px; line-height:1.5; }
+.theme-float {
+  position:fixed; right:34px; bottom:34px;
+  border:1px solid color-mix(in srgb, var(--accent2) 38%, transparent);
+  border-radius:999px; padding:14px 18px; text-decoration:none; color:#fff;
+  background:linear-gradient(135deg, var(--accent3), var(--accent));
+  font-weight:900;
+}
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.58); display:none; align-items:center; justify-content:center; z-index:50; }
+.modal.open { display:flex; }
+.box {
+  width:min(540px, 92vw); background:#111b28; border:1px solid var(--border);
+  border-radius:12px; padding:20px; box-shadow:0 24px 80px rgba(0,0,0,.45);
+  text-align:left;
+}
+body[data-theme="light"] .box { background:#fff; }
+.box input { width:100%; height:44px; border:1px solid var(--border); border-radius:8px; background:var(--panel2); padding:0 12px; margin:8px 0; }
+.actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.actions button { border-radius:8px; background:var(--panel2); border:1px solid var(--border); color:var(--text); }
+.actions .primary { background:linear-gradient(135deg, var(--accent3), var(--accent)); color:#fff; }
+
+/* Glass-поиск без всплывающих облачков */
+.search {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      rgba(255,255,255,.105) 38%,
+      rgba(255,255,255,.055));
+  border: 1px solid color-mix(in srgb, var(--accent2) 36%, rgba(255,255,255,.13));
+  box-shadow:
+    0 22px 58px rgba(0,0,0,.30),
+    0 0 0 1px rgba(255,255,255,.055) inset,
+    0 0 46px color-mix(in srgb, var(--accent) 13%, transparent);
+  backdrop-filter: blur(34px) saturate(1.55);
+  -webkit-backdrop-filter: blur(34px) saturate(1.55);
+}
+.search::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(110deg, rgba(255,255,255,.22), transparent 32%, rgba(255,255,255,.07) 70%, transparent),
+    radial-gradient(circle at 16% 0%, color-mix(in srgb, var(--accent2) 24%, transparent), transparent 36%);
+  opacity: .82;
+}
+.search::after {
+  content: "";
+  position: absolute;
+  left: 34px;
+  right: 120px;
+  top: 8px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.46), transparent);
+  opacity: .72;
+}
+.search input,
+.search button {
+  position: relative;
+  z-index: 1;
+}
+body[data-theme="light"] .search {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      rgba(255,255,255,.88) 40%,
+      rgba(255,255,255,.68));
+  box-shadow:
+    0 22px 54px rgba(44,145,210,.16),
+    0 0 0 1px rgba(255,255,255,.75) inset;
+}
+
+/* Финальная полировка строки поиска: стекло без серой "мутной" заливки */
+.search {
+  height: 64px;
+  padding: 0 13px 0 22px;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent2) 11%, rgba(255,255,255,.045)),
+      rgba(17, 31, 45, .56) 42%,
+      rgba(8, 14, 24, .48));
+  border-color: color-mix(in srgb, var(--accent2) 46%, rgba(255,255,255,.12));
+  box-shadow:
+    0 18px 60px rgba(0,0,0,.34),
+    0 0 0 1px rgba(255,255,255,.08) inset,
+    0 1px 0 rgba(255,255,255,.20) inset,
+    0 0 58px color-mix(in srgb, var(--accent) 15%, transparent);
+  backdrop-filter: blur(42px) saturate(1.7);
+  -webkit-backdrop-filter: blur(42px) saturate(1.7);
+}
+.search::before {
+  background:
+    linear-gradient(112deg, rgba(255,255,255,.25), transparent 28%, rgba(255,255,255,.08) 74%, transparent),
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent2) 28%, transparent), transparent 34%),
+    radial-gradient(circle at 92% 110%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%);
+}
+.search input::placeholder { color: color-mix(in srgb, var(--muted) 84%, #fff 16%); opacity: 1; }
+.search input { color: color-mix(in srgb, var(--text) 94%, var(--accent2)); font-weight: 520; }
+.search .icon-btn {
+  background: rgba(255,255,255,.105);
+  border-color: rgba(255,255,255,.13);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.07) inset;
+}
+.search .icon-btn:hover {
+  border-color: color-mix(in srgb, var(--accent2) 55%, rgba(255,255,255,.18));
+  background: color-mix(in srgb, var(--accent) 16%, rgba(255,255,255,.11));
+}
+.search button:not(.icon-btn) {
+  min-width: 76px;
+  height: 40px;
+  padding: 0 21px;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+body[data-theme="light"] .search {
+  background: linear-gradient(135deg, rgba(255,255,255,.92), color-mix(in srgb, var(--accent2) 10%, rgba(255,255,255,.82)));
+}

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654 https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'">
+<title>История</title>
+<style>
+:root{
+  --bg:#2b2c30;
+  --bg2:#242529;
+  --row:#2b2c30;
+  --row-hover:#34363b;
+  --text:#f0f1f3;
+  --muted:#b9bec7;
+  --muted2:#8d949e;
+  --accent:#8ab4f8;
+  --line:rgba(255,255,255,.08);
+  --check:#9aa0a6;
+}
+body[data-theme="light"]{
+  --bg:#f7f8fb;
+  --bg2:#ffffff;
+  --row:#ffffff;
+  --row-hover:#edf4ff;
+  --text:#202124;
+  --muted:#5f6368;
+  --muted2:#80868b;
+  --accent:#1a73e8;
+  --line:rgba(0,0,0,.08);
+  --check:#5f6368;
+}
+body[data-theme="amoled"]{
+  --bg:#000;
+  --bg2:#090b10;
+  --row:#0f1117;
+  --row-hover:#171a22;
+  --text:#f2fbff;
+  --muted:#a7b0be;
+  --muted2:#7f8794;
+  --accent:#62d9ff;
+  --line:rgba(255,255,255,.08);
+  --check:#9aa0a6;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  font-size:15px;
+}
+.page{
+  width:min(1120px,96vw);
+  margin:0 auto;
+  padding:28px 0 70px;
+}
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:24px;
+}
+.title{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:.1px;
+}
+.actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.btn{
+  height:40px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--text);
+  border-radius:8px;
+  padding:0 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn:hover{background:var(--row-hover)}
+.search{
+  height:48px;
+  display:flex;
+  align-items:center;
+  border:1px solid var(--line);
+  background:var(--bg2);
+  border-radius:8px;
+  margin-bottom:24px;
+  padding:0 16px;
+}
+.search input{
+  width:100%;
+  height:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-size:16px;
+}
+.search input::placeholder{color:var(--muted2)}
+.day{
+  margin:24px 0 18px;
+  font-size:18px;
+  font-weight:750;
+  color:var(--text);
+}
+.list{
+  width:100%;
+  display:block;
+}
+.row{
+  min-height:56px;
+  display:grid;
+  align-items:center;
+  grid-template-columns:36px 76px 34px minmax(0,1fr) 44px 34px;
+  gap:10px;
+  padding:0 14px 0 0;
+  color:var(--text);
+  text-decoration:none;
+  border-radius:8px;
+  background:transparent;
+  border:1px solid transparent;
+}
+.bookmark-row{
+  grid-template-columns:36px 34px minmax(0,1fr) 44px 34px;
+}
+.row:hover{
+  background:var(--row-hover);
+  border-color:var(--line);
+}
+.check{
+  display:flex;
+  justify-content:center;
+}
+.check input{
+  width:18px;
+  height:18px;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+.time{
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+}
+.favicon{
+  width:22px;
+  height:22px;
+  border-radius:6px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:rgba(255,255,255,.08);
+  color:var(--accent);
+  font-weight:900;
+  font-size:13px;
+}
+.favicon img{
+  width:20px;
+  height:20px;
+  object-fit:contain;
+}
+.item-main{
+  min-width:0;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+.item-title{
+  color:var(--text);
+  font-weight:720;
+  font-size:15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:62%;
+}
+.item-domain{
+  color:var(--muted);
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.star,.menu{
+  color:var(--muted2);
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  user-select:none;
+}
+.star.active{color:var(--accent)}
+.menu{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+.menu:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.empty{
+  color:var(--muted);
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:26px;
+  text-align:center;
+}
+.context{
+  position:fixed;
+  min-width:190px;
+  background:#202124;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  border-radius:10px;
+  padding:6px;
+  display:none;
+  z-index:50;
+}
+body[data-theme="light"] .context{background:#fff;border-color:rgba(0,0,0,.12)}
+.context.open{display:block}
+.context button{
+  width:100%;
+  height:38px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  padding:0 12px;
+  cursor:pointer;
+  font-weight:600;
+}
+.context button:hover{background:var(--row-hover)}
+@media(max-width:760px){
+  .page{width:96vw;padding-top:18px}
+  .row{grid-template-columns:32px 54px 30px minmax(0,1fr) 30px 28px;min-height:62px}
+  .bookmark-row{grid-template-columns:32px 30px minmax(0,1fr) 30px 28px}
+  .item-main{display:block}
+  .item-title{display:block;max-width:100%;font-size:15px}
+  .item-domain{display:block;font-size:13px;margin-top:2px}
+}
+</style>
+</head>
+<body data-theme="dark">
+<div class="page">
+  <div class="top">
+    <div class="title">История</div>
+    <div class="actions">
+      <button class="btn" onclick="clearHistory()">Очистить</button>
+    </div>
+  </div>
+  <div class="search"><input id="filter" placeholder="Поиск по истории"></div>
+  <div id="list" class="list"></div>
+</div>
+<div id="context" class="context"></div>
+<script>
+function applyPageAccent(color){
+  const v=String(color||"").trim();
+  if(!/^#[0-9a-f]{6}$/i.test(v))return;
+  document.documentElement.style.setProperty("--nexus-accent",v);
+  document.documentElement.style.setProperty("--accent",v);
+  document.documentElement.style.setProperty("--accent2",v);
+  document.documentElement.style.setProperty("--accent3",v);
+}
+
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+const params=new URLSearchParams(location.search);document.body.dataset.theme=params.get("theme")||"dark";applyPageAccent(params.get("accent"));
+let items=[];
+let selected=new Set();
+let contextItem=null;
+
+function domainOf(url){
+  try{return new URL(url).hostname.replace(/^www\./,"")}catch(_ ){return url||""}
+}
+function fav(src){return src?`<img src="${esc(src)}">`:"✦"}
+function timeOnly(ts){try{return new Date(ts).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})}catch(_ ){return ""}}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function dayTitle(ts){
+  const d=new Date(ts||Date.now());
+  const today=new Date();
+  const fmt=new Intl.DateTimeFormat("ru-RU",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const text=fmt.format(d).replace(/^./,c=>c.toUpperCase());
+  return sameDay(d,today) ? "Сегодня - " + text + "." : text + ".";
+}
+function keyDay(ts){
+  const d=new Date(ts||0);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function renderNexusData(data){items=data.history||[];render();}
+function render(){
+  const q=filter.value.toLowerCase().trim();
+  const filtered=items.filter(i=>((i.title||"")+" "+(i.url||"")+" "+(i.displayUrl||"")).toLowerCase().includes(q));
+  if(!filtered.length){list.innerHTML='<div class="empty">История пустая</div>';return;}
+  const groups=new Map();
+  for(const item of filtered){
+    const k=keyDay(item.visitedAt);
+    if(!groups.has(k))groups.set(k,[]);
+    groups.get(k).push(item);
+  }
+  let html="";
+  for(const arr of groups.values()){
+    arr.sort((a,b)=>(b.visitedAt||0)-(a.visitedAt||0));
+    html+=`<div class="day">${esc(dayTitle(arr[0].visitedAt))}</div>`;
+    html+=arr.map((i,idx)=>{
+      const id=String(i.id||i.url||idx);
+      const checked=selected.has(id)?"checked":"";
+      return `<div class="row" data-url="${esc(i.url)}" data-title="${esc(i.title||i.url)}" data-id="${esc(id)}">
+        <label class="check"><input type="checkbox" data-select="${esc(id)}" ${checked}></label>
+        <div class="time">${esc(timeOnly(i.visitedAt))}</div>
+        <div class="favicon">${fav(i.favicon)}</div>
+        <a class="item-main" href="${esc(i.url)}">
+          <span class="item-title">${esc(i.title||i.url)}</span>
+          <span class="item-domain">${esc(domainOf(i.url))}</span>
+        </a>
+        <div class="star"></div>
+        <button class="menu" data-menu="${esc(id)}" title="Действия">⋮</button>
+      </div>`;
+    }).join("");
+  }
+  list.innerHTML=html;
+}
+function clearHistory(){if(confirm("Очистить историю?")) window.nexus?.clearHistory?.();}
+filter.addEventListener("input",render);
+list.addEventListener("change",e=>{if(e.target.matches("[data-select]")){if(e.target.checked)selected.add(e.target.dataset.select);else selected.delete(e.target.dataset.select)}});
+list.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-menu]");
+  if(!btn)return;
+  e.preventDefault();e.stopPropagation();
+  const row=btn.closest(".row");
+  contextItem={url:row.dataset.url,title:row.dataset.title};
+  context.innerHTML=`<button onclick="openContextUrl()">Открыть</button><button onclick="copyContextUrl()">Копировать ссылку</button>`;
+  context.style.left=Math.min(e.clientX,innerWidth-210)+"px";
+  context.style.top=Math.min(e.clientY,innerHeight-100)+"px";
+  context.classList.add("open");
+});
+function openContextUrl(){if(contextItem?.url) location.href=contextItem.url}
+function copyContextUrl(){if(contextItem?.url) navigator.clipboard?.writeText(contextItem.url);context.classList.remove("open")}
+document.addEventListener("click",e=>{if(!e.target.closest(".context")&&!e.target.closest("[data-menu]"))context.classList.remove("open")});
+
+// Blur-эффект при клике ЛКМ — прозрачный, glass-like
+(function(){
+  const style=document.createElement("style");
+  style.textContent=`
+    @keyframes nexusBlurRipple{
+      0%{opacity:.55;width:8px;height:8px;filter:blur(2px)}
+      35%{opacity:.35;width:70px;height:70px;filter:blur(10px)}
+      70%{opacity:.15;width:130px;height:130px;filter:blur(20px)}
+      100%{opacity:0;width:180px;height:180px;filter:blur(32px)}
+    }
+    .nexus-click-blur{
+      position:fixed;left:0;top:0;width:8px;height:8px;border-radius:50%;
+      pointer-events:none;z-index:2147483647;transform:translate(-50%,-50%);
+      background:radial-gradient(circle,
+        color-mix(in srgb,var(--nexus-accent,#21b8ff) 60%,transparent) 0%,
+        color-mix(in srgb,var(--nexus-accent,#21b8ff) 25%,transparent) 40%,
+        transparent 70%);
+      mix-blend-mode:screen;
+      animation:nexusBlurRipple 720ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+  `;
+  document.head.appendChild(style);
+  document.addEventListener("mousedown",e=>{
+    if(e.button!==0)return;
+    const r=document.createElement("div");
+    r.className="nexus-click-blur";
+    r.style.left=e.clientX+"px";
+    r.style.top=e.clientY+"px";
+    document.body.appendChild(r);
+    r.addEventListener("animationend",()=>r.remove(),{once:true});
+  },true);
+})();
+
+if(window.__BROWSER_DATA__)renderNexusData(window.__BROWSER_DATA__);
+</script>
+</body>
+</html>

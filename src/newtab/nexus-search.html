@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654; img-src 'self' http://45.151.30.106:17654 https: data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Search</title>
+  <link rel="stylesheet" href="./nexus-search.css">
+</head>
+<body data-theme="dark">
+  <div class="wrap">
+    <div class="brand">
+      <img src="../assets/nexus-user-logo.png" alt="">
+      <div class="brand-title">Nexus<span>Search</span></div>
+    </div>
+    <form id="form" data-nexus-search>
+      <input id="q" autofocus autocomplete="off" placeholder="Поиск Nexus или введите адрес">
+      <button type="button" class="icon-btn" id="photoBtn" title="Поиск по фото">
+        <svg viewBox="0 0 24 24"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18v-8A1.5 1.5 0 0 1 4 8.5z"/><circle cx="12" cy="14" r="3.6"/></svg>
+      </button>
+      <button class="search-btn">Найти</button>
+    </form>
+    <nav class="tabs" id="tabs">
+      <a class="tab" data-section="all">Все</a>
+      <a class="tab" data-section="images">Картинки</a>
+      <a class="tab" data-section="videos">Видео</a>
+      <a class="tab" data-section="shopping">Покупки</a>
+      <a class="tab" data-section="news">Новости</a>
+    </nav>
+    <div class="summary" id="summary"></div>
+    <main id="results"></main>
+  </div>
+  <a class="theme-link" href="nexus://settings">Настройка темы</a>
+  <div class="modal" id="photoModal">
+    <div class="box">
+      <h2>Поиск по фото</h2>
+      <p>Изображение сохраняется локально и открывается через визуальный поиск Google Lens.</p>
+      <input type="file" id="imageFile" accept="image/*">
+      <input type="url" id="imageUrl" placeholder="https://site.com/image.jpg">
+      <div class="actions">
+        <button class="primary" id="searchImageBtn">Искать по фото</button>
+        <button id="closePhotoBtn">Закрыть</button>
+      </div>
+      <p id="photoStatus"></p>
+    </div>
+  </div>
+  <script src="./nexus-search.js"></script>
+</body>
+</html>

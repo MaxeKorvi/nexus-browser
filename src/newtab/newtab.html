@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654; img-src 'self' http://45.151.30.106:17654 https: data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Search</title>
+  <link rel="stylesheet" href="./newtab.css">
+</head>
+<body data-theme="dark">
+  <main class="page">
+    <section class="center">
+      <div class="logo">
+        <img src="../assets/nexus-user-logo.png" alt="">
+        <div class="logo-text">Nexus<span>Search</span></div>
+      </div>
+      <form class="search" data-nexus-search>
+        <input autofocus type="text" placeholder="Поиск Nexus или введите адрес" autocomplete="off" spellcheck="false">
+        <button type="button" class="icon-btn" id="photoBtn" title="Поиск по фото">
+          <svg viewBox="0 0 24 24"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18v-8A1.5 1.5 0 0 1 4 8.5z"/><circle cx="12" cy="14" r="3.6"/></svg>
+        </button>
+        <button type="submit">Найти</button>
+      </form>
+      <div class="shortcuts" id="shortcuts"></div>
+      <div class="hint">Добавь свои быстрые сайты — стартовые ярлыки больше не навязаны.</div>
+    </section>
+  </main>
+
+  <a class="theme-float" href="nexus://settings">Настройка темы</a>
+
+  <div class="modal" id="addModal">
+    <div class="box">
+      <h2>Добавить сайт</h2>
+      <input id="titleInput" placeholder="Название">
+      <input id="urlInput" placeholder="https://example.com">
+      <div class="actions">
+        <button class="primary" id="saveShortcut">Добавить</button>
+        <button id="closeAdd">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="photoModal">
+    <div class="box">
+      <h2>Поиск по фото</h2>
+      <p class="muted">Изображение сохраняется локально в каталог Nexus и открывается через визуальный поиск Google Lens.</p>
+      <input type="file" id="imageFile" accept="image/*">
+      <input id="imageUrl" placeholder="https://site.com/image.jpg">
+      <div class="actions">
+        <button class="primary" id="searchImageBtn">Искать по фото</button>
+        <button id="closePhotoBtn">Закрыть</button>
+      </div>
+      <p id="photoStatus" class="muted"></p>
+    </div>
+  </div>
+
+  <script src="./newtab.js"></script>
+</body>
+</html>

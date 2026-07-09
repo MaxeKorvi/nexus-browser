@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=Nexus Browser
+Comment=Fast Electron browser with Nexus Search
+GenericName=Web Browser
+Exec=nexus-browser %U
+Icon=nexus-browser
+Terminal=false
+Type=Application
+StartupNotify=true
+StartupWMClass=nexus-browser
+Categories=Network;WebBrowser;
+MimeType=x-scheme-handler/http;x-scheme-handler/https;text/html;
+Keywords=web;browser;internet;search;nexus;
+Actions=new-window;private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=nexus-browser
+
+[Desktop Action private-window]
+Name=New Private Window
+Exec=nexus-browser --private

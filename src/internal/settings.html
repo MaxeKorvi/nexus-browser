@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654 https:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>Настройки</title>
+  <link rel="stylesheet" href="./internal.css">
+  <style>
+    .setting { display:flex; justify-content:space-between; align-items:center; gap:18px; }
+    .setting p { margin:4px 0 0; color:var(--muted); }
+    select, input[type="color"] { min-width:180px; height:42px; border:1px solid var(--border); border-radius:8px; background:var(--panel2); color:var(--text); padding:0 12px; }
+    input[type="checkbox"] { accent-color:var(--accent); transform:scale(1.15); }
+    .theme-preview { width:100%; height:90px; border-radius:10px; border:1px solid var(--border);
+      background:radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--accent2) 24%, transparent), transparent 34%),
+        linear-gradient(135deg, var(--bg2), var(--bg0));
+      margin-bottom:12px; }
+    .badge { color:var(--accent2); font-weight:800; font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <img class="mark" src="../assets/nexus-user-logo.png" style="object-fit:contain; background:transparent">
+        Настройки
+      </div>
+    </div>
+    <div class="theme-preview"></div>
+
+    <div class="setting">
+      <div><b>Настройка темы</b><p>Выбери стиль браузера.</p></div>
+      <select id="theme"><option value="dark">Тёмная</option><option value="light">Светлая</option><option value="amoled">AMOLED</option></select>
+    </div>
+    <div class="setting">
+      <div><b>Акцентный цвет</b><p>Цвет кнопок, подсветки и элементов Nexus.</p></div>
+      <input id="accentColor" type="color" value="#21b8ff">
+    </div>
+
+    <div class="card" style="margin-top:18px"><h2>Безопасность</h2></div>
+
+    <div class="setting">
+      <div><b>HTTPS-Only <span class="badge">новое</span></b><p>Принудительно использовать HTTPS. Открытые http:// сайты будут помечены как небезопасные.</p></div>
+      <input id="httpsOnly" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Блокировать смешанное содержимое <span class="badge">новое</span></b><p>Не давать HTTPS-страницам загружать http://-ресурсы.</p></div>
+      <input id="blockInsecureContent" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Do Not Track <span class="badge">новое</span></b><p>Отправлять заголовок DNT: 1 и Sec-GPC: 1.</p></div>
+      <input id="doNotTrack" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Спрашивать разрешения сайтов <span class="badge">новое</span></b><p>Камера, микрофон, геолокация и т.д. — спрашивать через диалог.</p></div>
+      <input id="askForPermissions" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Подстраивать тему под сайты <span class="badge">бета</span></b><p>Браузер будет принудительно применять текущую тему Nexus к обычным сайтам.</p></div>
+      <input id="forceSiteTheme" type="checkbox">
+    </div>
+
+    <div class="card" style="margin-top:18px"><h2>Приватность и хранение</h2></div>
+
+    <div class="setting">
+      <div><b>Закладки и история</b><p>Открываются здесь, чтобы верхняя панель была чище.</p></div>
+      <div class="actions">
+        <button class="btn secondary" id="openBookmarksBtn">Закладки</button>
+        <button class="btn secondary" id="openHistoryBtn">История</button>
+      </div>
+    </div>
+    <div class="setting">
+      <div><b>Восстанавливать вкладки</b><p>При запуске браузер откроет прошлые вкладки.</p></div>
+      <input id="restoreTabs" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Очищать список загрузок при выходе</b><p>Файлы не удаляются, очищается только список.</p></div>
+      <input id="clearDownloadsOnExit" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Приватные вкладки по умолчанию</b><p>Новые вкладки не будут попадать в историю и восстановление сессии.</p></div>
+      <input id="privateModeDefault" type="checkbox">
+    </div>
+    <div class="setting">
+      <div><b>Сохранять историю</b><p>Если выключить, посещения не будут сохраняться в историю.</p></div>
+      <input id="saveHistory" type="checkbox">
+    </div>
+
+    <div class="card" style="margin-top:18px"><h2>Аккаунт и данные</h2></div>
+
+    <div class="setting">
+      <div><b>Профили и пароли</b><p>Профили, сохранённые пароли (теперь с AES-GCM шифрованием) и экспорт в CSV/JSON.</p></div>
+      <button class="btn secondary" id="openProfilesBtn">Открыть</button>
+    </div>
+    <div class="setting">
+      <div><b>Настройки поиска</b><p>Статус локального хоста 45.151.30.106:17654 и индекс Nexus Search.</p></div>
+      <button class="btn secondary" id="openSearchSettingsBtn">Открыть</button>
+    </div>
+    <div class="setting">
+      <div><b>Очистить данные браузера</b><p>История, cookies, cache и localStorage (включая все профили).</p></div>
+      <button class="btn secondary" id="clearDataBtn">Очистить</button>
+    </div>
+    <div class="setting">
+      <div><b>Сбросить пользователя</b><p>Удалит локальный профиль и снова покажет экран первого запуска.</p></div>
+      <button class="btn secondary" id="resetUserBtn">Сбросить</button>
+    </div>
+  </div>
+
+  <script src="./settings.js"></script>
+</body>
+</html>

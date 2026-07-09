@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654 https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>Профили и пароли</title>
+  <link rel="stylesheet" href="./internal.css">
+  <style>
+    .grid { display:grid; grid-template-columns:.88fr 1.12fr; gap:14px; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    input, select { width:100%; height:42px; border:1px solid var(--border); border-radius:8px; background:var(--panel2); color:var(--text); padding:0 12px; margin:6px 0 10px; }
+    button, .btn { border:1px solid var(--border); border-radius:8px; background:var(--panel2); color:var(--text); padding:10px 13px; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; }
+    .primary { background:linear-gradient(135deg, var(--accent3), var(--accent)); color:#fff; border:none; }
+    .item { padding:12px; border:1px solid var(--border); border-radius:10px; background:var(--panel2); margin-bottom:8px; }
+    .danger { color:#ff9b9b; }
+    .password { font-family: ui-monospace, Consolas, monospace; }
+    .profile-item { display:grid; grid-template-columns:52px 1fr; gap:12px; align-items:center; }
+    .avatar { width:52px; height:52px; border-radius:50%; display:grid; place-items:center; overflow:hidden; background:linear-gradient(135deg, var(--accent3), var(--accent)); font-size:26px; font-weight:950; }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
+    .active-badge { color:var(--accent2); font-size:12px; font-weight:900; margin-top:3px; }
+    @media (max-width:860px) { .grid { grid-template-columns:1fr; } .row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="wrap">
+    <div class="header">
+      <div class="brand"><img class="mark" src="../assets/nexus-user-logo.png" style="object-fit:contain;background:transparent">Профили и пароли</div>
+      <button class="btn" id="settingsBtn">Настройки</button>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Профили</h2>
+          <div class="muted">Здесь видно активного пользователя. Для каждого профиля можно хранить свои пароли и экспортировать их отдельно. <b>Теперь cookies и storage изолированы между профилями.</b></div>
+          <div id="profiles"></div>
+
+          <h2 style="margin-top:18px">Добавить профиль</h2>
+          <input id="profileName" placeholder="Название профиля">
+          <select id="profileAvatar">
+            <option value="wolf">Волк / логотип</option>
+            <option value="dog">Собачка</option>
+            <option value="cat">Кот</option>
+            <option value="robot">Робот</option>
+            <option value="fox">Лиса</option>
+            <option value="space">Космос</option>
+          </select>
+          <input id="profileFile" type="file" accept="image/*">
+          <button class="primary" id="addProfileBtn">Добавить профиль</button>
+        </div>
+
+        <div class="card">
+          <h2>Экспорт</h2>
+          <p class="muted">CSV совместим с импортом паролей в многие браузеры. Файл с паролями не шифруется — не отправляй его никому. Пароли в самом браузере теперь хранятся зашифрованными (AES-GCM через OS keyring).</p>
+          <div class="actions">
+            <button id="exportCsvBtn">Экспорт CSV</button>
+            <button id="exportJsonBtn">Экспорт JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Добавить пароль</h2>
+          <div class="row"><input id="site" placeholder="Сайт, например https://example.com"><input id="username" placeholder="Логин"></div>
+          <div class="row"><input id="password" placeholder="Пароль" type="password"><input id="note" placeholder="Заметка"></div>
+          <button class="primary" id="addPasswordBtn">Сохранить</button>
+        </div>
+        <div class="card"><h2>Сохранённые пароли</h2><div id="passwords"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./profiles.js"></script>
+</body>
+</html>

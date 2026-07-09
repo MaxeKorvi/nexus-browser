@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https:; connect-src 'self' http://45.151.30.106:17654 https:; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexus</title>
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body data-theme="dark">
+  <div id="chrome-shell">
+    <header id="top-chrome">
+      <div id="tab-strip" class="drag-region">
+        <div id="tabs" class="no-drag"></div>
+        <button id="new-tab" class="chrome-icon no-drag" title="Новая вкладка (Ctrl+T)">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="tab-strip-space"></div>
+        <div id="window-controls" class="no-drag">
+          <button id="minimize" title="Свернуть">—</button>
+          <button id="maximize" title="Развернуть">□</button>
+          <button id="close-window" title="Закрыть">×</button>
+        </div>
+      </div>
+
+      <nav id="toolbar" class="no-drag">
+        <button id="back" class="nav-btn" title="Назад (Alt+←)"><svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg></button>
+        <button id="forward" class="nav-btn" title="Вперёд (Alt+→)"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+        <button id="reload" class="nav-btn" title="Обновить (Ctrl+R)"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v6h-6"/></svg></button>
+        <button id="home" class="nav-btn" title="Стартовая"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 10.5V20h11v-9.5"/><path d="M10 20v-5h4v5"/></svg></button>
+        <form id="address-form">
+          <div id="security-pill">NEXUS</div>
+          <input id="address" type="text" autocomplete="off" spellcheck="false" placeholder="Поиск Nexus или адрес сайта"/>
+          <div id="loading-dot"></div>
+        </form>
+        <button id="bookmark" class="nav-btn" title="Добавить в закладки (Ctrl+D)"><svg viewBox="0 0 24 24"><path d="M6.5 4.5h11v16L12 17l-5.5 3.5z"/></svg></button>
+        <button id="pin" class="nav-btn" title="Закрепить вкладку"><svg viewBox="0 0 24 24"><path d="m14 4 6 6-3 1-4 4 1 4-1 1-4-4-4 4-1-1 4-4-4-4 1-1 4 1 4-4z"/></svg></button>
+        <button id="private" class="nav-btn" title="Приватная вкладка (Ctrl+Shift+N)"><svg viewBox="0 0 24 24"><path d="M3 14c2-3 4-4.5 7-4.5h4c3 0 5 1.5 7 4.5"/><circle cx="8" cy="15" r="2.5"/><circle cx="16" cy="15" r="2.5"/><path d="M10.5 15h3"/></svg></button>
+        <div id="downloads-wrap" class="downloads-hidden">
+          <button id="downloads" class="nav-btn" title="Загрузки (Ctrl+J)"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg></button>
+          <div id="downloads-popover"></div>
+        </div>
+        <button id="profiles" class="profile-chip" title="Профили и пароли">
+          <span id="profile-avatar" class="profile-avatar">?</span>
+          <span id="profile-name">Профиль</span>
+        </button>
+        <button id="settings" class="nav-btn" title="Настройки"><svg viewBox="0 0 24 24"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/><path d="M19.4 13.5a7.8 7.8 0 0 0 .05-3l2-1.4-2-3.4-2.35 1a8.2 8.2 0 0 0-2.55-1.45L14.3 2h-4.6l-.25 3.25A8.2 8.2 0 0 0 6.9 6.7l-2.35-1-2 3.4 2 1.4a7.8 7.8 0 0 0 .05 3l-2.05 1.45 2 3.4 2.45-1.05a8 8 0 0 0 2.45 1.4L9.7 22h4.6l.25-3.3A8 8 0 0 0 17 17.3l2.45 1.05 2-3.4z"/></svg></button>
+        <button id="browser-menu" class="nav-btn menu-btn" title="Меню (Alt+F)"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M5 12h14"/><path d="M5 17h14"/></svg></button>
+      </nav>
+    </header>
+
+    <main id="web-area"></main>
+  </div>
+
+  <!-- Кастомное Nexus-меню с blur-фоном -->
+  <div id="nexus-menu" class="nexus-menu" style="display: none;">
+    <div class="nexus-menu-section">
+      <button class="nexus-menu-item" data-action="new-tab">
+        <span class="ic">＋</span><span>Новая вкладка</span><kbd>Ctrl+T</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="new-private">
+        <span class="ic">◐</span><span>Новая приватная вкладка</span><kbd>Ctrl+Shift+N</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="reopen-closed">
+        <span class="ic">↻</span><span>Восстановить закрытую</span><kbd>Ctrl+Shift+T</kbd>
+      </button>
+    </div>
+    <div class="nexus-menu-divider"></div>
+    <div class="nexus-menu-section">
+      <button class="nexus-menu-item" data-action="history">
+        <span class="ic">⌚</span><span>История</span>
+      </button>
+      <button class="nexus-menu-item" data-action="bookmarks">
+        <span class="ic">★</span><span>Закладки</span><kbd>Ctrl+H</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="downloads">
+        <span class="ic">↓</span><span>Загрузки</span><kbd>Ctrl+J</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="profiles">
+        <span class="ic">👤</span><span>Профили и пароли</span>
+      </button>
+    </div>
+    <div class="nexus-menu-divider"></div>
+    <div class="nexus-menu-section">
+      <button class="nexus-menu-item" data-action="find">
+        <span class="ic">🔍</span><span>Найти на странице</span><kbd>Ctrl+F</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="print">
+        <span class="ic">🖨</span><span>Печать</span><kbd>Ctrl+P</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="save-page">
+        <span class="ic">💾</span><span>Сохранить страницу</span><kbd>Ctrl+S</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="zoom-in">
+        <span class="ic">＋</span><span>Увеличить масштаб</span><kbd>Ctrl++</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="zoom-out">
+        <span class="ic">−</span><span>Уменьшить масштаб</span><kbd>Ctrl+-</kbd>
+      </button>
+      <button class="nexus-menu-item" data-action="zoom-reset">
+        <span class="ic">⤢</span><span>Сбросить масштаб</span><kbd>Ctrl+0</kbd>
+      </button>
+    </div>
+    <div class="nexus-menu-divider"></div>
+    <div class="nexus-menu-section">
+      <button class="nexus-menu-item" data-action="settings">
+        <span class="ic">⚙</span><span>Настройки</span>
+      </button>
+      <button class="nexus-menu-item" data-action="search-settings">
+        <span class="ic">🔎</span><span>Настройки поиска</span>
+      </button>
+      <button class="nexus-menu-item" data-action="copy-url">
+        <span class="ic">⧉</span><span>Копировать адрес страницы</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Find-in-page bar -->
+  <div id="find-bar" class="find-bar" hidden>
+    <input id="find-input" type="text" placeholder="Найти на странице" autocomplete="off" spellcheck="false"/>
+    <span id="find-status" class="find-status"></span>
+    <button id="find-prev" class="find-btn" title="Предыдущее (Shift+Enter)">↑</button>
+    <button id="find-next" class="find-btn" title="Следующее (Enter)">↓</button>
+    <button id="find-close" class="find-btn find-close-btn" title="Закрыть (Esc)">×</button>
+  </div>
+
+  <!-- Zoom indicator -->
+  <div id="zoom-indicator" class="zoom-indicator" hidden>
+    <button id="zoom-out-btn" title="Уменьшить">−</button>
+    <span id="zoom-value">100%</span>
+    <button id="zoom-in-btn" title="Увеличить">＋</button>
+    <button id="zoom-reset-btn" title="Сбросить">⟲</button>
+  </div>
+
+  <!-- Экран первого запуска -->
+  <section id="setup-overlay" hidden>
+    <div class="setup-card">
+      <div class="setup-logo-wrap"><img src="../assets/nexus-user-logo.png" alt="Nexus"></div>
+      <h1>Создай профиль Nexus</h1>
+      <p>Это первый запуск браузера. Сначала создай пользователя — так будут храниться настройки, закладки, история, профили и пароли.</p>
+
+      <label class="setup-label">Имя пользователя</label>
+      <input id="setup-name" class="setup-input" placeholder="Например, Maxim" maxlength="32">
+
+      <label class="setup-label">Аватарка</label>
+      <div id="avatar-grid" class="avatar-grid">
+        <button class="avatar-option active" data-avatar="wolf"><img src="../assets/nexus-user-logo.png"><span>Волк</span></button>
+        <button class="avatar-option" data-avatar="dog"><span class="emoji-avatar">🐶</span><span>Собачка</span></button>
+        <button class="avatar-option" data-avatar="cat"><span class="emoji-avatar">🐱</span><span>Кот</span></button>
+        <button class="avatar-option" data-avatar="robot"><span class="emoji-avatar">🤖</span><span>Робот</span></button>
+        <button class="avatar-option" data-avatar="fox"><span class="emoji-avatar">🦊</span><span>Лиса</span></button>
+        <button class="avatar-option" data-avatar="space"><span class="emoji-avatar">🌌</span><span>Космос</span></button>
+      </div>
+
+      <label class="setup-label">Или выбери свою картинку</label>
+      <input id="setup-file" class="setup-file" type="file" accept="image/*">
+
+      <button id="setup-create" class="setup-create">Создать профиль</button>
+      <div id="setup-error" class="setup-error"></div>
+    </div>
+  </section>
+
+  <script src="./app.js"></script>
+</body>
+</html>

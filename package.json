@@ -1,0 +1,100 @@
+{
+  "name": "nexus-browser",
+  "version": "6.0.0",
+  "description": "Nexus Browser — безопасный Electron-браузер с локальным поисковым движком, профилями и зашифрованным хранилищем паролей.",
+  "main": "src/main.js",
+  "author": "Nexus",
+  "license": "MIT",
+  "private": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "NEXUS_DEV=1 electron .",
+    "check": "node --check src/main.js && node --check src/preload.js && node --check src/site-preload.js && node --check src/ui/app.js && node --check src/ui/menu-popup.js && node --check src/newtab/newtab.js && node --check src/newtab/nexus-search.js && node --check src/internal/downloads.js && node --check src/internal/profiles.js && node --check src/internal/search-settings.js && node --check src/internal/settings.js && node --check src/search-engine/engine.js",
+    "pack:linux": "npx --yes electron-builder --linux dir",
+    "dist:linux": "npx --yes electron-builder --linux AppImage tar.gz",
+    "dist:win": "electron-builder --win nsis --x64",
+    "dist:win:portable": "electron-builder --win portable --x64",
+    "aur:source": "bash scripts/make-aur-source.sh",
+    "aur:local": "bash scripts/make-aur-source.sh && cd packaging/aur-local && makepkg -Csi"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^26.15.3"
+  },
+  "productName": "Nexus Browser",
+  "homepage": "https://github.com/MaxeKorvi/nexus-browser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxeKorvi/nexus-browser.git"
+  },
+  "build": {
+    "appId": "com.nexus.browser",
+    "productName": "Nexus Browser",
+    "copyright": "Copyright © 2026 Nexus",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "README_RU.txt",
+      "!**/*.map",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/.cache/**"
+    ],
+    "asar": true,
+    "compression": "maximum",
+    "protocols": [
+      {
+        "name": "Nexus Browser",
+        "schemes": [
+          "nexus"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "Nexus Browser",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nexus Browser",
+      "menuCategory": "Nexus",
+      "deleteAppDataOnUninstall": false,
+      "displayLanguageSelector": false,
+      "include": "build/installer.nsh"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "tar.gz",
+        "dir"
+      ],
+      "category": "Network",
+      "icon": "build/icons",
+      "executableName": "nexus-browser"
+    }
+  }
+}

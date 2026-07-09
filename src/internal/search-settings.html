@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://45.151.30.106:17654 https: data:; connect-src http://45.151.30.106:17654; img-src 'self' http://45.151.30.106:17654 https: data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>Nexus Search Settings</title>
+  <link rel="stylesheet" href="./internal.css">
+  <style>
+    .grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    .list { display:grid; gap:8px; margin-top:10px; }
+    .item { padding:12px; border:1px solid var(--border); background:var(--panel2); border-radius:16px; }
+    .url { color:var(--accent2); word-break:break-all; }
+    label { display:block; margin:10px 0 5px; color:var(--muted); font-size:13px; }
+    input { height:44px; border:1px solid var(--border); border-radius:8px; background:var(--panel2); color:var(--text); padding:0 13px; font-size:15px; }
+    @media (max-width:850px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand"><div class="mark">N</div>Настройки поиска</div>
+      <div class="actions"><button class="btn secondary" id="refreshBtn">Обновить</button></div>
+    </div>
+    <div class="card">
+      <h2>Качество поиска</h2>
+      <div class="muted">Nexus показывает результаты из локального индекса на 45.151.30.106:17654, безопасного каталога и внешних безопасных направлений. Чтобы находил больше сайтов, добавляй сайты в индекс или запускай краулер.</div>
+    </div>
+    <div class="card"><h2>Статус индекса</h2><div id="status" class="muted">Загрузка...</div></div>
+    <div class="card"><h2>Управление индексом</h2>
+      <div class="actions">
+        <button class="btn" id="rebuildBtn">Переиндексировать историю и закладки</button>
+        <button class="btn secondary" id="clearBtn">Очистить поисковый индекс</button>
+      </div>
+    </div>
+    <div class="card"><h2>Добавить сайт в индекс</h2>
+      <p class="muted">Краулер скачает страницы, извлечёт title, description, h1-h3, текст и ссылки.</p>
+      <label>URL сайта</label>
+      <input id="siteUrl" placeholder="https://example.com" style="width:100%">
+      <div class="grid">
+        <div><label>maxDepth</label><input id="maxDepth" type="number" value="1" min="0" max="3" style="width:100%"></div>
+        <div><label>maxPages</label><input id="maxPages" type="number" value="50" min="1" max="250" style="width:100%"></div>
+        <div><label>timeout, мс</label><input id="timeout" type="number" value="9000" min="2000" max="30000" style="width:100%"></div>
+      </div>
+      <br><button class="btn" id="addSiteBtn">Запустить индексацию</button>
+      <div id="crawlResult" class="muted" style="margin-top:10px"></div>
+    </div>
+    <div class="card"><h2>Вручную добавленные сайты</h2><div id="manualSites" class="list"></div></div>
+    <div class="card"><h2>Страницы в индексе</h2><div id="pages" class="list"></div></div>
+  </div>
+  <script src="./search-settings.js"></script>
+</body>
+</html>
