@@ -13,16 +13,29 @@
     "start": "electron .",
     "dev": "NEXUS_DEV=1 electron .",
     "check": "node --check src/main.js && node --check src/preload.js && node --check src/site-preload.js && node --check src/ui/app.js && node --check src/ui/menu-popup.js && node --check src/newtab/newtab.js && node --check src/newtab/nexus-search.js && node --check src/internal/downloads.js && node --check src/internal/profiles.js && node --check src/internal/search-settings.js && node --check src/internal/settings.js && node --check src/search-engine/engine.js",
+    "lint": "eslint src/**/*.js tests/**/*.js",
+    "lint:fix": "eslint src/**/*.js tests/**/*.js --fix",
+    "format": "prettier --write \"src/**/*.{js,css,html}\" \"tests/**/*.js\" \"*.{js,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,css,html}\" \"tests/**/*.js\" \"*.{js,json,md}\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "pack:linux": "npx --yes electron-builder --linux dir",
     "dist:linux": "npx --yes electron-builder --linux AppImage tar.gz",
     "dist:win": "electron-builder --win nsis --x64",
     "dist:win:portable": "electron-builder --win portable --x64",
     "aur:source": "bash scripts/make-aur-source.sh",
-    "aur:local": "bash scripts/make-aur-source.sh && cd packaging/aur-local && makepkg -Csi"
+    "aur:local": "bash scripts/make-aur-source.sh && cd packaging/aur-local && makepkg -Csi",
+    "build": "npm run check && npm run lint && npm run test",
+    "preversion": "npm run build",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "electron": "^33.4.11",
-    "electron-builder": "^26.15.3"
+    "electron-builder": "^26.15.3",
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.0"
   },
   "productName": "Nexus Browser",
   "homepage": "https://github.com/MaxeKorvi/nexus-browser",

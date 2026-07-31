@@ -10,6 +10,7 @@
 ![Electron](https://img.shields.io/badge/Electron-33.x-47848F?logo=electron)
 ![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![CI/CD](https://github.com/MaxeKorvi/nexus-browser/workflows/CI%2FCD%20Pipeline/badge.svg)
 
 </div>
 
@@ -34,11 +35,12 @@
   - предложение сохранить пароль после входа на сайт;
   - обновление сохранённого пароля;
   - автоподстановка логина и пароля;
-  - локальное зашифрованное хранилище.
+  - локальное зашифрованное хранилище (AES-256-GCM).
 
 - 👤 **Профили**
   - поддержка пользовательских профилей;
-  - разделение пользовательских данных.
+  - разделение пользовательских данных;
+  - изоляция cookies и localStorage между профилями.
 
 - 📥 **Загрузки**
   - просмотр активных и завершённых загрузок;
@@ -48,13 +50,15 @@
 - ⭐ **Закладки и история**
   - сохранение посещённых страниц;
   - управление закладками;
-  - внутренние страницы браузера.
+  - внутренние страницы браузера;
+  - импорт/экспорт закладок в HTML.
 
 - 🎨 **Glass-дизайн**
   - стеклянная строка поиска;
   - кастомные popup-меню;
   - blur-эффекты;
-  - SVG-иконки.
+  - SVG-иконки;
+  - тёмная/светлая темы.
 
 - 📦 **Упаковка**
   - Arch/AUR package;
@@ -62,16 +66,24 @@
   - desktop-entry для Linux;
   - ярлык в меню приложений.
 
+- 🔒 **Безопасность**
+  - шифрование паролей AES-256-GCM через OS keyring;
+  - отключены опасные Chrome флаги;
+  - WebRTC не сливает локальный IP;
+  - строгая Content Security Policy.
+
 ---
 
 ## 📸 Скриншоты
 
 > Добавь сюда свои скриншоты после публикации проекта.
 
-```md
+```markdown
 ![Main window](docs/screenshots/main.png)
 ![Search page](docs/screenshots/search.png)
 ![Menu](docs/screenshots/menu.png)
+![Profiles](docs/screenshots/profiles.png)
+![Passwords](docs/screenshots/passwords.png)
 ```
 
 ---
@@ -101,195 +113,169 @@ nexus-browser
 Nexus Browser
 ```
 
----
-
-### Вариант 2: установка из AUR
-
-Когда пакет будет опубликован в AUR:
+### Вариант 2: из AUR (после публикации)
 
 ```bash
 paru -S nexus-browser
 ```
 
-`electron33-bin` подтянется автоматически как зависимость.
+---
+
+## 🪟 Установка на Windows
+
+### Вариант 1: Installer
+
+1. Скачайте `Nexus Browser-6.0.0-win-x64.exe` из [Releases](https://github.com/MaxeKorvi/nexus-browser/releases)
+2. Запустите установщик
+3. Следуйте инструкциям мастера установки
+
+### Вариант 2: Portable версия
+
+1. Скачайте `Nexus Browser-6.0.0-win-portable.exe`
+2. Запустите без установки
 
 ---
 
-## 🪟 Сборка Windows EXE
+## 🐧 Установка на Linux (AppImage)
+
+1. Скачайте `Nexus Browser-6.0.0-linux.AppImage` из [Releases](https://github.com/MaxeKorvi/nexus-browser/releases)
+2. Сделайте файл исполняемым:
+   ```bash
+   chmod +x "Nexus Browser-6.0.0-linux.AppImage"
+   ```
+3. Запустите:
+   ```bash
+   ./Nexus Browser-6.0.0-linux.AppImage
+   ```
+
+---
+
+## 🛠️ Разработка
 
 ### Требования
 
-- Windows 10/11 или Linux с Wine;
-- Node.js 22+;
-- npm;
-- интернет для скачивания Electron и зависимостей.
+- Node.js >= 18
+- npm >= 9
+- Git
 
-### Сборка на Windows
+### Установка зависимостей
 
-```powershell
+```bash
 npm install
+```
+
+### Запуск в режиме разработки
+
+```bash
+npm run dev
+```
+
+### Проверка кода
+
+```bash
+# Синтаксическая проверка
 npm run check
+
+# ESLint
+npm run lint
+
+# Prettier форматирование
+npm run format
+
+# Тесты
+npm test
+```
+
+### Сборка дистрибутивов
+
+```bash
+# Linux AppImage и tar.gz
+npm run dist:linux
+
+# Windows installer
 npm run dist:win
-```
 
-Готовый установщик появится в папке:
-
-```text
-release/
-```
-
-Обычно файл называется примерно так:
-
-```text
-Nexus Browser-6.0.0-win-x64.exe
-```
-
-### Portable-версия
-
-```powershell
+# Windows portable
 npm run dist:win:portable
-```
-
----
-
-## 🛠️ Запуск в режиме разработки
-
-```bash
-npm install
-npm start
-```
-
-Проверка JavaScript-файлов:
-
-```bash
-npm run check
 ```
 
 ---
 
 ## 📁 Структура проекта
 
-```text
+```
 nexus-browser/
 ├── src/
-│   ├── main.js                  # Главный процесс Electron
-│   ├── preload.js               # Preload для UI
-│   ├── site-preload.js          # Preload для сайтов
-│   ├── ui/                      # Основной интерфейс браузера
-│   ├── newtab/                  # Новая вкладка и Nexus Search
-│   ├── internal/                # Внутренние страницы браузера
-│   ├── search-engine/           # Логика поиска
-│   └── assets/                  # Логотипы и иконки
-│
-├── build/                       # Иконки и файлы для сборки
-├── packaging/
-│   ├── aur/                     # Файлы для публикации в AUR
-│   ├── aur-local/               # Локальная сборка Arch-пакета
-│   └── windows/                 # Инструкции для Windows
-│
-├── scripts/                     # Вспомогательные скрипты
+│   ├── main.js              # Главный процесс Electron
+│   ├── preload.js           # Preload скрипт
+│   ├── site-preload.js      # Preload для сайтов
+│   ├── ui/                  # UI браузера
+│   │   ├── app.js
+│   │   ├── index.html
+│   │   └── styles.css
+│   ├── internal/            # Внутренние страницы
+│   │   ├── settings.*
+│   │   ├── profiles.*
+│   │   ├── downloads.*
+│   │   └── history.*
+│   ├── newtab/              # Новая вкладка
+│   │   ├── newtab.*
+│   │   └── nexus-search.*
+│   └── search-engine/       # Поисковый движок
+│       └── engine.js
+├── packaging/               # Файлы для упаковки
+│   ├── aur/                 # AUR пакет
+│   ├── aur-local/           # Локальная сборка AUR
+│   └── windows/             # Windows установщик
+├── tests/                   # Тесты
+│   └── main.test.js
+├── docs/                    # Документация
+│   └── screenshots/         # Скриншоты
+├── build/                   # Ресурсы сборки
+│   └── icons/               # Иконки
+├── .github/workflows/       # CI/CD
+│   └── ci.yml
 ├── package.json
-└── package-lock.json
+├── README.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+└── SECURITY.md
 ```
 
 ---
 
-## 🔐 Где хранятся данные
+## 🧪 Тестирование
 
-Пользовательские данные браузера хранятся локально в директории профиля Electron.
-
-На Linux обычно:
-
-```text
-~/.config/nexus-browser/
-```
-
-Там могут находиться:
-
-```text
-history.json
-bookmarks.json
-passwords.json
-profiles.json
-settings.json
-```
-
-Пароли сохраняются локально и шифруются средствами Electron/системного хранилища, если это доступно в окружении.
-
----
-
-## 🧹 Сброс данных браузера
-
-Если нужно сбросить профиль:
+Проект использует **Jest** для тестирования:
 
 ```bash
-mv ~/.config/nexus-browser ~/.config/nexus-browser_backup
-nexus-browser
-```
+# Запустить все тесты
+npm test
 
-Если нужно удалить данные полностью:
+# Запустить с покрытием
+npm run test:coverage
 
-```bash
-rm -rf ~/.config/nexus-browser
+# Запустить в режиме watching
+npm run test:watch
 ```
 
 ---
 
-## 🌐 Сделать Nexus Browser браузером по умолчанию
+## 📝 Changelog
 
-```bash
-xdg-settings set default-web-browser nexus-browser.desktop
-
-xdg-mime default nexus-browser.desktop x-scheme-handler/http
-xdg-mime default nexus-browser.desktop x-scheme-handler/https
-xdg-mime default nexus-browser.desktop text/html
-```
-
-Проверка:
-
-```bash
-xdg-settings get default-web-browser
-xdg-mime query default x-scheme-handler/http
-xdg-mime query default x-scheme-handler/https
-```
+См. [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
-## 📦 Публикация в AUR
+## 🤝 Вклад в проект
 
-Файлы для AUR находятся здесь:
+См. [CONTRIBUTING.md](CONTRIBUTING.md)
 
-```text
-packaging/aur/
-```
+---
 
-Для публикации нужны:
+## 🔒 Безопасность
 
-```text
-PKGBUILD
-.SRCINFO
-nexus-browser.sh
-nexus-browser.desktop
-nexus-browser.install
-```
-
-Перед публикацией нужно создать GitHub Release с архивом:
-
-```text
-nexus-browser-6.0.0.tar.gz
-```
-
-Release tag:
-
-```text
-v6.0.0
-```
-
-После публикации пользователи смогут установить браузер через:
-
-```bash
-paru -S nexus-browser
-```
+См. [SECURITY.md](SECURITY.md)
 
 ---
 
@@ -344,9 +330,20 @@ rm -rf ~/.config/nexus-browser
 
 ---
 
+## 📞 Контакты
+
+- GitHub: [MaxeKorvi/nexus-browser](https://github.com/MaxeKorvi/nexus-browser)
+- Issues: [Сообщить об ошибке](https://github.com/MaxeKorvi/nexus-browser/issues)
+
+---
+
 <div align="center">
 
 **Nexus Browser**  
 Свой браузер. Свой стиль. Свой поиск.
+
+[![Changelog](https://img.shields.io/badge/changelog-v6.0.0-blue)](CHANGELOG.md)
+[![Contributing](https://img.shields.io/badge/contributing-welcome-green)](CONTRIBUTING.md)
+[![Security](https://img.shields.io/badge/security-policy-red)](SECURITY.md)
 
 </div>
